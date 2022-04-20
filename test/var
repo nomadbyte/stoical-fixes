@@ -1,0 +1,40 @@
+#! ../stoical
+
+% Test load and store operators
+
+'test load
+
+"Testing load and store operators...\n" =
+
+% Set up
+123 'var variable
+'str 'svar variable
+'var address 'varref variable
+
+% -----------------
+" @ \t% Load value\n" =
+var @ 123 eq ok?
+svar @ 'str eq ok?
+
+% Load indirectly
+var 'indvar variable
+indvar @ @ 123 eq ok?
+
+% -----------------
+" ! \t% Store value\n" =
+321 var ! var @ 321 eq ok?
+'str2 svar ! svar @ 'str2 eq ok?
+
+% Override value type
+111 svar ! svar @ 111 eq ok?
+'strstr var ! var @ 'strstr eq ok?
+
+% Set value by reference
+555 varref @ ! var @ 555 eq ok?
+
+% -----------------
+" 1+! \t% Increment variable\n" =
+123 'v0 variable
+v0 1+! v0 @ 124 eq ok?
+
+fail @ exit

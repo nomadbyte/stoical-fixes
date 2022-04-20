@@ -1,8 +1,8 @@
 BIN= ../stoical -l ../lib
 
-all: string constant array hash thread literal unary binary
+all: string constant array hash thread literal unary binary var
 
-.PHONY: string constant array thread literal unary binary
+.PHONY: string constant array thread literal unary binary var
 
 string:
 	@$(BIN) $@
@@ -19,4 +19,6 @@ literal:
 unary:
 	@$(BIN) $@
 binary:
+	@$(BIN) $@
+var:
 	@$(BIN) $@
