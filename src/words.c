@@ -477,6 +477,10 @@ end()
  */
 begin(at)
 	struct voc_entry *entry;
+
+	if ( peek(sst).type != T_REF )
+		error("invalid address pointer\n");
+
 	entry = ppop(sst);
 
 #ifdef THREADS
@@ -505,7 +509,10 @@ begin(bang)
 	cell *ptr;
 	cell a;
 	struct voc_entry *entry;
-	
+
+	if ( peek(sst).type != T_REF )
+		error("invalid address pointer\n");
+
 	entry	= ppop(sst);
 
 #ifdef THREADS
