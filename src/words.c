@@ -477,6 +477,10 @@ end()
  */
 begin(at)
 	struct voc_entry *entry;
+
+	if ( peek(sst).type != T_REF )
+		error("invalid address pointer\n");
+
 	entry = ppop(sst);
 
 #ifdef THREADS
@@ -505,7 +509,10 @@ begin(bang)
 	cell *ptr;
 	cell a;
 	struct voc_entry *entry;
-	
+
+	if ( peek(sst).type != T_REF )
+		error("invalid address pointer\n");
+
 	entry	= ppop(sst);
 
 #ifdef THREADS
@@ -1049,7 +1056,10 @@ begin(cat)
 	string *s;
 	string *one;
 	string *two;
-	
+
+	if ( peek(sst).type != T_STR || idx(sst,1).type != T_STR )
+		exec(*adr(badtype));
+
 	two = spop(sst);
 	one = spop(sst);
 	len = one->l + two->l;
@@ -2380,6 +2390,9 @@ end()
  * Print a source version of the word addressed by TOS.
  */
 begin(decompile)
+	if ( peek(sst).type != T_REF )
+		error("invalid address pointer\n");
+
 	st_decompile( ppop(sst), NULL );
 end()
 /**(compiler) vstack (new)
