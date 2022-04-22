@@ -766,8 +766,8 @@ examples:
 
 	foo( 'bar )@
 	mark?
-	if	'does
-	else	'doesn't
+	if	'doesn't
+	else	'does
 	then	" exist." + =
 
 The above example first retrieves the value of the key "bar" from the hash
