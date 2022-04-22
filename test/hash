@@ -6,18 +6,76 @@
 
 "Testing associative arrays...\n" =
 
-[ 'foo 1 'bar 2 'cat 3 ] 'hash( hash
+% -----------------
+" hash \t% Initialize\n" =
+[ ] 'empty( hash
+[ 'a 1 'b 2 ] 'a2( hash
+[ '1 'abc '2 'def '3 'ghi ] 's3( hash
+[ 'k1 'abc 'k2 2 'k3 3 ] 'as3( hash
+[ 'a 1 'a 3 ] 'adup( hash
 
-% initialization
-hash( 'bar )@ 2 eq ok?
-% iteration
+% -----------------
+" @ \t% Number of elements\n" =
+empty( @ 0 eq ok?
+a2( @ 2 eq ok?
+s3( @ 3 eq ok?
+as3( @ 3 eq ok?
+adup( @ 1 eq ok?
+
+% -----------------
+" )@ \t% Load element value\n" =
+a2( 'a )@ 1 eq ok?
+a2( 'b )@ 2 eq ok?
+s3( '3 )@ 'ghi eq ok?
+as3( 'k2 )@ 2 eq ok?
+adup( 'a )@ 1 eq ok? % right-to-left assignment
+
+% Requesting a non-existing key returns a mark
+empty( 'nokey )@ mark? ok?
+a2( 'a )@ mark? not ok?
+a2( 'unknown )@ mark? ok?
+
+% -----------------
+" )! \t% Store element value\n" =
+2 a2( 'a )! a2( 'a )@ 2 eq ok?
+1 a2( 'b )! a2( 'b )@ 1 eq ok?
+'abc s3( '3 )! s3( '3 )@ 'abc eq ok?
+'ghi s3( '1 )! s3( '1 )@ 'ghi eq ok?
+123 adup( 'a )! adup( 'a )@ 123 eq ok?
+
+% Override element's value type
+'str a2( 'a )! a2( 'a )@ 'str eq ok?
+123 s3( '3 )! s3( '3 )@ 123 eq ok?
+
+% -----------------
+" )! \t% Insert new key-value pair\n" =
+555 s3( 'newkey )! s3( @ 4 eq ok?
+s3( 'newkey )@ 555 eq ok?
+
+% -----------------
+" )delete \t% Delete element\n" =
+[ 'one 1 ] 'd1( hash
+d1( 'one )delete
+d1( @ 0 eq ok?
+d1( 'one )@ mark? ok?
+
+[ '1 1 '2 'str '3 3 ] 'd3( hash
+d3( 'unknown )delete d3( @ 3 ok?
+d3( '3 )delete d3( @ 2 eq ok?
+d3( '1 )@ 1 eq ok?
+d3( '2 )@ 'str eq ok?
+d3( '3 )@ mark? ok?
+
+d3( '1 )delete d3( @ 1 eq ok?
+d3( '1 )@ mark? ok?
+d3( '2 )@ 'str eq ok?
+
+d3( '2 )delete d3( @ 0 eq ok?
+d3( '2 )@ mark? ok?
+
+% -----------------
+"  \t% Iteration\n" =
+[ 'a 1 'b 2 'c 3 ] 'hash( hash
 0 hash( )each{ hash( i )@ + } 6 eq ok?
-% replace
-'foo hash( 'bar )! hash( 'bar )@ 'foo eq ok?
-% insert
-4 hash( 'moo )! hash( 'moo )@ 4 eq ok?
-% delete
-hash( 'bar )delete hash( 'bar )@ mark? ok?
 
 fail @ exit
-
