@@ -18,7 +18,7 @@
 'ONE 'one $eq false eq ok?
 
 % -----------------
-" $eq \t% Is not equal\n" =
+" $ne \t% Is not equal\n" =
 'one 'notone $ne true eq ok?
 'one 'one $ne false eq ok?
 
