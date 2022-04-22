@@ -715,14 +715,14 @@ begin(bracket_pop)
 			 * the garbage collector. */
 			gmark( a[i].v.s, gstack, &gst );
 
-		
+		push(sst,a[i]);
+
 		if ( (long)(entry->parm.v.f) % 128 == 0 )
 		/* Time to free some memory. */
 		(&entry->parm)[1].v.p = realloc( (&entry->parm)[1].v.p,
 						 (entry->parm.v.f) *
 						  sizeof( cell) );
 			
-		push(sst,a[i]);
 	}
 
 #ifdef THREADS
