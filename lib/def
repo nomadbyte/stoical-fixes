@@ -105,6 +105,12 @@ types< definitions
 'eq :( f f ): feq ;
 'eq :( s s ): $eq ;
 
+% %(binary) ne
+% Compare TOS against TOS-1 for inequality
+% %
+'ne :( f f ): fne ;
+'ne :( s s ): $ne ;
+
 % define some type checking wrappers for common problem words.
 'count :( s ): count ;
 'stype :( p f ): stype ;
