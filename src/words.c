@@ -717,12 +717,12 @@ begin(bracket_pop)
 
 		push(sst,a[i]);
 
-		if ( (long)(entry->parm.v.f) % 128 == 0 )
-		/* Time to free some memory. */
-		(&entry->parm)[1].v.p = realloc( (&entry->parm)[1].v.p,
-						 (entry->parm.v.f) *
-						  sizeof( cell) );
-			
+		if ( (long)(entry->parm.v.f + 1) % 128 == 0 )
+			/* Time to free some memory. */
+			/* reserve 0th elem */
+			(&entry->parm)[1].v.p = realloc( (&entry->parm)[1].v.p,
+							 (entry->parm.v.f + 1) *
+							  sizeof( cell) );
 	}
 
 #ifdef THREADS
@@ -768,11 +768,12 @@ begin(bracket_delete)
 
 	entry->parm.v.f -= n;
 	
-	if ( (long)(entry->parm.v.f) % 128 == 0 )
+	if ( (long)(entry->parm.v.f + 1) % 128 == 0 )
 	/* Time to free some memory. */
-	(&entry->parm)[1].v.p = realloc( (&entry->parm)[1].v.p,
-					 (entry->parm.v.f) *
-					  sizeof( cell) );
+	/* reserve 0th elem */
+		(&entry->parm)[1].v.p = realloc( (&entry->parm)[1].v.p,
+						 (entry->parm.v.f + 1) *
+						  sizeof( cell) );
 #ifdef THREADS
 	if ( entry->type & A_SHARE )
 		pthread_rwlock_unlock( &entry->lock );
