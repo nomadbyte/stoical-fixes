@@ -1,19 +1,78 @@
 #! ../stoical
 
-% Test associative arrays
+% Test arrays
 
 'test load
 
 "Testing arrays...\n" =
 
-[ 1 2 3 ] 'ary[ array
+% -----------------
+" array \t% Initialize\n" =
+[ ] 'empty[ array
+[ 1 2 ] 'a2[ array
+[ 'abc 'def 'ghi ] 's3[ array
+[ 'abc 2 3 ] 'as3[ array
 
-% initialization
-ary[ 1 ]@ 2 eq ok?
-% replace
-'foo ary[ 1 ]! ary[ 1 ]@ 'foo eq ok?
-% insert
-% delete
+% -----------------
+" @ \t% Number of elements\n" =
+empty[ @ 0 eq ok?
+a2[ @ 2 eq ok?
+s3[ @ 3 eq ok?
+as3[ @ 3 eq ok?
+
+% -----------------
+" ]@ \t% Load element value\n" =
+a2[ 0 ]@ 1 eq ok?
+a2[ 1 ]@ 2 eq ok?
+s3[ 2 ]@ 'ghi eq ok?
+as3[ 1 ]@ 2 eq ok?
+
+% -----------------
+" ]! \t% Store element value\n" =
+2 a2[ 0 ]! a2[ 0 ]@ 2 eq ok?
+1 a2[ 1 ]! a2[ 1 ]@ 1 eq ok?
+'abc s3[ 2 ]! s3[ 2 ]@ 'abc eq ok?
+'ghi s3[ 0 ]! s3[ 0 ]@ 'ghi eq ok?
+
+% Override element's value type
+'str a2[ 0 ]! a2[ 0 ]@ 'str eq ok?
+123 s3[ 2 ]! s3[ 2 ]@ 123 eq ok?
+
+% -----------------
+" ]push \t% Push new element\n" =
+[ ] 'a[ array
+123 a[ ]push a[ @ 1 eq ok?
+a[ 0 ]@ 123 eq ok?
+
+% Push with different value type
+'str a[ ]push a[ @ 2 eq ok?
+a[ 1 ]@ 'str eq ok?
+a[ 0 ]@ 123 eq ok?
+
+% -----------------
+" ]pop \t% Pop an element\n" =
+[ 1 'abc 3 ] 'aa[ array
+aa[ ]pop 3 eq ok?
+aa[ @ 2 eq ok?
+aa[ ]pop 'abc eq ok?
+aa[ @ 1 eq ok?
+aa[ ]pop 1 eq ok?
+aa[ @ 0 eq ok?
+
+% -----------------
+" ]delete \t% Delete elements\n" =
+[ 1 ] 'd1[ array
+1 d1[ 0 ]delete
+d1[ @ 0 eq ok?
+
+[ 1 'str 3 ] 'd3[ array
+2 d3[ 0 ]delete
+d3[ @ 1 eq ok?
+d3[ 0 ]@ 3 eq ok?
+
+[ 1 'str 8 3 ] 'd4[ array
+2 d4[ 2 ]delete
+d4[ @ 2 eq ok?
+d4[ 1 ]@ 'str eq ok?
 
 fail @ exit
-
