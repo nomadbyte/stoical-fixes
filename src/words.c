@@ -957,7 +957,7 @@ begin(tuck)
 	push(sst,a);
 end()
 /**(stack) -rot
- * "( a b c - c a b )"
+ * "( a b c - b c a )"
  * Rotate the top three stack cells backwards by one position.
  */
 begin(minus_rot)
@@ -972,7 +972,7 @@ begin(minus_rot)
 	push(sst,a);
 end()
 /**(stack) +rot
- * "( a b c - b c a )"
+ * "( a b c - c a b )"
  * Rotate the top three stack cells forwards by one position.
  */
 begin(plus_rot)
