@@ -1,0 +1,149 @@
+#! ../stoical
+
+% Test stack manipulation words
+
+'test load
+
+"Testing stack manipulation words...\n" =
+
+% Set up
+[ 1 2 3 ] 'a3[ array
+[ 'a 1 'b 2 'c 3 ] 'h3( hash
+123 'var variable
+555 'c constant 
+() var 'varref variable
+
+% -----------------
+"  \t% Push/Pop\n" =
+1 1 eq ok?
+1 2 3 3 eq ok? 2 eq ok? 1 eq ok?
+'str 'str eq ok?
+a3[ @ 3 eq ok?
+h3( @ 3 eq ok?
+var @ 123 eq ok?
+c 555 eq ok?
+varref @ @ var @ eq ok?
+
+% -----------------
+" drop \t% Drop TOS\n" =
+1 2 drop 1 eq ok? 
+1 2 3 4 drop 3 eq ok? drop 1 eq ok?
+'s1 's2 drop 's1 eq ok?
+
+% -----------------
+" idrop \t% Drop TOSth cell\n" =
+1 2 3 1 idrop 2 eq ok? drop
+1 2 3 2 idrop 3 eq ok? drop
+ 
+% -----------------
+" cells \t% Number of cells on stack \n" =
+cells 0 eq ok?
+1 cells 1 eq ok? drop
+'a 'b 'c cells 3 eq ok? drop drop drop
+
+% -----------------
+" mark \t% Leave mark on stack\n" =
+mark cells 1 eq ok?
+mark? ok?
+1 2 3 mark cells 4 eq ok?
+mark? ok? cells 3 eq ok? drop drop drop
+ 
+% -----------------
+" dup \t% Duplicate\n" =
+1 dup 1 eq ok? drop
+'str dup 'str eq ok? drop
+a3[ dup @ 3 eq ok? drop
+h3( dup @ 3 eq ok? drop
+var dup @ 123 eq ok? drop
+c dup 555 eq ok? drop
+varref dup @ @ var @ eq ok? drop
+
+% -----------------
+" idup \t% Duplicate TOSth cell\n" =
+1 2 3 1 idup 3 eq ok? drop drop drop
+1 2 3 2 idup 2 eq ok? drop drop drop
+
+% -----------------
+" swap \t% Swap\n" =
+1 2 swap cells 2 eq ok?
+1 eq ok? 2 eq ok?
+1 2 3 swap 2 eq ok? 3 eq ok? drop
+
+% -----------------
+" over \t% Duplicate TOS-1\n" =
+1 2 over cells 3 eq ok?
+1 eq ok? drop drop
+1 2 3 over 2 eq ok? drop drop drop
+
+% -----------------
+" nip \t% Drop TOS-1\n" =
+1 2 3 nip cells 2 eq ok?
+3 eq ok?
+1 eq ok?
+
+% -----------------
+" tuck \t% Insert a copy of TOS before TOS-1\n" =
+1 2 3 tuck cells 4 eq ok?
+3 eq ok? 2 eq ok? 3 eq ok? 1 eq ok?
+
+% -----------------
+" -rot \t% Rotate top 3 cells backwards\n" =
+1 2 3 -rot cells 3 eq ok?
+1 eq ok? 3 eq ok? 2 eq ok?
+1 2 3 4 -rot cells 4 eq ok?
+2 eq ok? 4 eq ok? 3 eq ok? drop
+
+% -----------------
+" +rot \t% Rotate top 3 cells forwards\n" =
+1 2 3 +rot cells 3 eq ok?
+2 eq ok? 1 eq ok? 3 eq ok?
+1 2 3 4 +rot cells 4 eq ok?
+3 eq ok? 2 eq ok? 4 eq ok? 1 eq ok?
+
+% -----------------
+" flip \t% Swap TOS and TOS-2\n" =
+1 2 3 flip cells 3 eq ok?
+1 eq ok? 2 eq ok? 3 eq ok?
+1 2 3 4 flip cells 4 eq ok?
+2 eq ok? 3 eq ok? 4 eq ok? 1 eq ok?
+
+% -----------------
+" [ ] \t% Push elements on stack; count at TOS\n" =
+[ ] cells 1 eq ok?
+0 eq ok?
+[ 1 2 3 ] cells 4 eq ok?
+3 eq ok?
+3 eq ok? 2 eq ok? 1 eq ok? 
+
+% -----------------
+" .t \t% Replace TOS with its type (numeric)\n" =
+% float
+123 .t cells 1 eq ok?
+2 eq ok?
+
+% string
+'str .t cells 1 eq ok?
+3 eq ok?
+
+% reference
+123 'v variable
+v .t cells 1 eq ok?
+4 eq ok?
+
+% array (also reference)
+[ ] 'a[ array
+a[ .t cells 1 eq ok?
+4 eq ok?
+
+% hash (also reference)
+[ ] 'h( hash
+h( .t cells 1 eq ok?
+4 eq ok?
+
+% -----------------
+" <l l> \t% Transfer to/from the loop stack\n" =
+1 <l cells 0 eq ok?  % lstack
+l> cells 1 eq ok?
+1 eq ok?
+
+fail @ exit
