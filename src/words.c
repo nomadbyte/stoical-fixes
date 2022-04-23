@@ -1022,9 +1022,16 @@ begin(idrop)
 	
 	n = fpop(sst);
 
-	/* shift the stack down a cell */
-	memmove((sst - n) - 1, sst - n, (sst - sstmin) * sizeof( cell ) );
-	sst--;
+	if ( n > 1 )
+	{
+		cell *ptr;
+		ptr = sst - n;
+
+		/* shift the stack down a cell */
+		memmove( ptr, ptr + 1, (n - 1) * sizeof( cell ) );
+	}
+
+	drop(sst);
 end()
 /* Print a pointer */
 begin(pdot)
