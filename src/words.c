@@ -913,7 +913,8 @@ end()
  * Discard the value on top of the stack.
  */
 begin(drop)
-	drop(sst);
+	if ( sst > sstmin )
+		drop(sst);
 end()
 /**(stack) dup
  * "( a - a a )"
@@ -1009,9 +1010,15 @@ begin(idup)
 	cell a;
 	
 	n = fpop(sst);
-	a = *(sst - n);
 
-	push(sst,a);
+	if ( n > (sst - sstmin) )
+		error("stack empty\n");
+
+	if ( n > 0 )
+	{
+		a = *(sst - n);
+		push(sst,a);
+	}
 end()
 /**(stack) idrop - (new)
  * "( a b c 3 - b c )"
@@ -1022,6 +1029,9 @@ begin(idrop)
 	
 	n = fpop(sst);
 
+	if ( n > (sst - sstmin) )
+		error("stack empty\n");
+
 	if ( n > 1 )
 	{
 		cell *ptr;
@@ -1031,7 +1041,8 @@ begin(idrop)
 		memmove( ptr, ptr + 1, (n - 1) * sizeof( cell ) );
 	}
 
-	drop(sst);
+	if ( n > 0 )
+		drop(sst);
 end()
 /* Print a pointer */
 begin(pdot)
