@@ -3,6 +3,7 @@
 /config.h
 /config.status
 /stamp-h1
+/autom4te.cache
 
 # http://www.gnu.org/software/automake
 .deps/
