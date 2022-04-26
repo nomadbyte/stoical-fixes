@@ -24,15 +24,20 @@ as3[ @ 3 eq ok?
 " ]@ \t% Load element value\n" =
 a2[ 0 ]@ 1 eq ok?
 a2[ 1 ]@ 2 eq ok?
+a2[ -1 ]@ a2[ 1 ]@ eq ok?
+a2[ -2 ]@ a2[ 0 ]@ eq ok?
 s3[ 2 ]@ 'ghi eq ok?
+s3[ -2 ]@ s3[ 1 ]@ eq ok?
 as3[ 1 ]@ 2 eq ok?
 
 % -----------------
 " ]! \t% Store element value\n" =
 2 a2[ 0 ]! a2[ 0 ]@ 2 eq ok?
 1 a2[ 1 ]! a2[ 1 ]@ 1 eq ok?
+5 a2[ -1 ]! a2[ 1 ]@ 5 eq ok?
 'abc s3[ 2 ]! s3[ 2 ]@ 'abc eq ok?
 'ghi s3[ 0 ]! s3[ 0 ]@ 'ghi eq ok?
+'qwe s3[ -2 ]! s3[ 1 ]@ 'qwe eq ok?
 
 % Override element's value type
 'str a2[ 0 ]! a2[ 0 ]@ 'str eq ok?
@@ -74,5 +79,16 @@ d3[ 0 ]@ 3 eq ok?
 2 d4[ 2 ]delete
 d4[ @ 2 eq ok?
 d4[ 1 ]@ 'str eq ok?
+
+
+[ 'str 3 7 6 8 ] 'd5[ array
+1 d5[ -1 ]delete
+d5[ @ 4 eq ok?
+d5[ -1 ]@ 6 eq ok?
+
+2 d5[ -3 ]delete
+d5[ @ 2 eq ok?
+d5[ -1 ]@ 6 eq ok?
+d5[ 0 ]@ 'str eq ok?
 
 fail @ exit
