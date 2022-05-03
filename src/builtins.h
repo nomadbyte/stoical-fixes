@@ -128,7 +128,7 @@ struct voc_item builtins[] = {
 { A_WRD,"ttygetln",adr(ttygetln) },
 
 
-{ A_WRD,"vocab",	adr(vocab) },
+{ A_IMM,"vocab",	adr(vocab) },
 { A_WRD,"ttyin",	adr(ttyin) },
 { A_WRD,"ttyout", adr(ttyout) },
 { A_WRD,"count",	adr(count) },
