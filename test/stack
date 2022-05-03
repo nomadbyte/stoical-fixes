@@ -130,15 +130,15 @@ varref dup @ @ var @ eq ok? drop
 v .t cells 1 eq ok?
 4 eq ok?
 
-% array (also reference)
+% array (reference to array entry)
 [ ] 'a[ array
 a[ .t cells 1 eq ok?
-4 eq ok?
+7 eq ok?
 
-% hash (also reference)
+% hash (reference to hash entry)
 [ ] 'h( hash
 h( .t cells 1 eq ok?
-4 eq ok?
+8 eq ok?
 
 % -----------------
 " <l l> \t% Transfer to/from the loop stack\n" =

@@ -239,8 +239,31 @@ begin(dispatch)
 	
 	/* generate vector address from stack types */
 	for ( i = 0; i < head->max; i++ )
-		type |= (ub4) (idx(sst,i).type) << (i * 8);
+	{
+		type_t data_type;
 		
+		data_type = idx(sst,i).type;
+
+		/* for reference cells, use the specific data type of the
+		 * underlying entry
+		 *
+		 * this applies to arrays, hashes, and clauses
+		 */
+		if ( data_type == T_REF )
+		{
+			struct voc_entry *entry;
+
+			entry = (struct voc_entry*)(idx(sst,i).v.p);
+			switch ( entry->type & A_TMASK )
+			{
+				case A_ARRAY: { data_type = T_ARRAY;	break; }
+				case A_HASH: { data_type = T_HASH;	break; }
+				case A_CLS: { data_type = T_CLS;	break; }
+			}
+		}
+		type |= (ub4) (data_type) << (i * 8);
+	}
+
 	/* search until we find a match */
 	
 	vec = head->vec;
@@ -3564,7 +3587,29 @@ end()
  * Replace TOS with the type of what we replaced. 
  */
 begin(dott)
-	peek(sst).v.f	= peek(sst).type;
+	type_t data_type;
+
+	data_type = peek(sst).type;
+
+	/* for reference cells, use the specific data type of the
+	 * underlying entry
+	 *
+	 * this applies to arrays, hashes, and clauses
+	 */
+	if ( data_type == T_REF )
+	{
+		struct voc_entry *entry;
+
+		entry = (struct voc_entry*)(peek(sst).v.p);
+		switch ( entry->type & A_TMASK )
+		{
+			case A_ARRAY: { data_type = T_ARRAY;	break; }
+			case A_HASH: { data_type = T_HASH;	break; }
+			case A_CLS: { data_type = T_CLS;	break; }
+		}
+	}
+
+	peek(sst).v.f	= data_type;
 	peek(sst).type	= T_FLT;
 end()
 /**(unary) exec
