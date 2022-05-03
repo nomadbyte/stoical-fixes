@@ -1,0 +1,77 @@
+#! ../stoical
+
+% Test constants
+
+'test load
+
+"Testing constants...\n" =
+
+% -----------------
+"  \t% Pre-defined constants\n" =
+true -1 eq ok?
+false 0 eq ok?
+
+% -----------------
+"  \t% Numeric\n" =
+100 'c1 constant
+c1 100 eq ok?
+1.234 'c2 constant
+c2 1.234 eq ok?
+c1 2 * 200 eq ok?
+
+% -----------------
+"  \t% String\n" =
+'str 'cs constant
+cs 'str eq ok?
+cs 'cat cat 'strcat eq ok?
+
+% -----------------
+"  \t% Reference\n" =
+'str 'cstr constant
+'cstr address 'cref constant
+'newval cref !  % store value by "constant's" address
+cstr 'newval eq ok?
+
+% -----------------
+"  \t% Type-checked definitions\n" =
+0 'dt variable
+'ww :( f f ): 22 dt ! ;
+'ww :( s s ): 33 dt ! ;
+'ww :( f s ): 23 dt ! ;
+'ww :( s f ): 32 dt ! ;
+
+1 2 ww dt @ 22 eq ok?
+'a 'b ww dt @ 33 eq ok?
+1 'a ww dt @ 23 eq ok?
+'a 2 ww dt @ 32 eq ok?
+
+1 'vf variable
+'a 'vs variable
+
+vf @ vf @ ww dt @ 22 eq ok?
+
+'ww :( f r ): ! ;
+'ww :( s r ): ! ;
+
+55 vf ww vf @ 55 eq ok?
+'str vs ww vs @ 'str eq ok?
+
+% access array elements by adding an offset index
+'+ :( a f ): ]@ ;
+[ 2 3 4 ] 'a[ array
+
+a[ 1 + a[ 1 ]@ eq ok?
+a[ 2 + a[ 2 ]@ eq ok?
+
+% add contents of one hash into another (overriding)
+'+ :( h h ): dup )each{ dup i )@ 3 idup i )! } drop ;
+[ 'a 1 ] 'h1( hash
+[ 'b 2 'c 3 ] 'h2( hash
+
+h1( h2( + @ 3 eq ok?
+h1( 'b )@ h2( 'b )@ eq ok?
+
+% test the pointer type
+
+
+fail @ exit
